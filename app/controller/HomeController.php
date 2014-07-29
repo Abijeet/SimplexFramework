@@ -4,4 +4,3 @@ class HomeController extends Controller{
 		$this->set('Name', 'Abijeet');
 	}
 }
-?>

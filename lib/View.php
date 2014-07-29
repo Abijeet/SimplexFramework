@@ -13,11 +13,12 @@ class View {
 	const ELEMENT_FOLDER = 'Element';
 	
 	function __construct($route, $controller) {
-		$this->objController = $controller;
-		$this->controller = $route->controller;
-		$this->view = $route->view;
-		$this->layout = $route->layout;	
-		$this->title = $route->pageTitle;	
+		$this->objController = $controller;		
+		$this->layout = $controller->getLayout();
+		$this->title = $controller->getTitle();
+
+		$this->controller = $route->controllerName;
+		$this->view = $route->view;				
 	}
 	
 	/**
@@ -60,9 +61,11 @@ class View {
 		}
 		// Pull in the variables set by the controller.
 		$controllerVars = $this->objController->vars;
-		foreach($controllerVars as $key => $value) {
-			$$key = $value;
-		}
+		if(isset($controllerVars)) {
+			foreach($controllerVars as $key => $value) {
+				$$key = $value;
+			}	
+		}		
 		include($viewPath);
 		return true;
 	}
@@ -97,7 +100,7 @@ class View {
 	private function getViewPath($view, $controller) {
 		// Remove the Controller from the end of the Controller name
 		$controllerFolder = preg_replace('/Controller$/', '', $controller);
-		return ROOT_PATH . DS . View::VIEW_FOLDER . DS . $controllerFolder . DS . $view . '.php';
+		return APP_PATH . View::VIEW_FOLDER . DS . $controllerFolder . DS . $view . '.php';
 	}
 	
 	/**
@@ -106,7 +109,7 @@ class View {
 	* @return string Path of the layout file
 	*/
 	private function getLayoutPath($layout) {
-		return ROOT_PATH . DS . View::VIEW_FOLDER . DS .  View::LAYOUT_FOLDER . DS . $layout . '.php';;
+		return APP_PATH . View::VIEW_FOLDER . DS .  View::LAYOUT_FOLDER . DS . $layout . '.php';;
 	}
 	
 	/**
@@ -115,7 +118,7 @@ class View {
 	* @return string Path of the element file
 	*/
 	private function getElementPath($element) {
-		return ROOT_PATH . DS . View::VIEW_FOLDER . DS . View::ELEMENT_FOLDER . DS . $element . '.php';;
+		return APP_PATH . View::VIEW_FOLDER . DS . View::ELEMENT_FOLDER . DS . $element . '.php';;
 	}
 }
 ?>

@@ -1,3 +1,5 @@
 <?php
-define('DS', DIRECTORY_SEPARATOR);
 define('CONTROLLER_FOLDER', 'controller');
+define('WEB_FOLDER', '/SimplexFramework');
+
+error_reporting(E_ALL);
