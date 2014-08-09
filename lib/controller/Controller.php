@@ -1,19 +1,32 @@
 <?php
+require(__DIR__ . '/component/Authorization.php');
+require(__DIR__ . '/component/Session.php');
 /**
 * The controller base class.
 */
 class Controller {
 	protected $route;
-	public $vars;
+	protected $request;
+	
+	public $Auth;
+	public $Session;
+	
+	private $vars;
 	private $title;
 	private $layout;
 	private $view;
-	
+		
 	function __construct($route) {
 		$this->route = $route;
+		if(Model::Load($route->controllerName)) {
+			$this->{$route->controllerName} = new $route->controllerName();	
+		}
 		$this->var = array();
 		$this->title = '';
 		$this->layout = 'default';
+		$this->Session = Session::getSessionObj();
+		$this->Auth = Authorization::getAuthObj($this->Session->getUserType());
+		$this->request = new Request();
 	}
 	
 	/**
@@ -54,8 +67,38 @@ class Controller {
 	* @param string $view Name of the view	
 	* @return void
 	*/
-	final function render($view) {
-		$this->route->view =  $view;
+	final function render($viewPath) {
+		if(is_string($viewPath)) {
+			$this->route->view['action'] = $viewPath;
+		}
+		if(is_array($viewPath)) {
+			if(!empty($viewPath['controller'])) {
+				$this->route->view['controller'] = $viewPath['controller'];
+			}
+			if(!empty($viewPath['action'])) {
+				$this->route->view['action'] = $viewPath['action'];
+			}
+		}
+	}
+	
+	final function redirect($controller, $action = NULL, $params = NULL) {
+		if(empty($action)) {
+			$action = 'index';
+		}
+		if(empty($params) || !is_array($params)) {
+			$params = array();
+		}
+		$requestParams = '';
+		foreach($params as $key => $value) {
+			if(is_string($key)) {
+				$requestParams .= "$key:$value/";
+			} else {
+				$requestParams .= "$value/";
+			}
+		}
+		$baseUrl = Router::getURL("$controller/$action");
+		header('Location: '. $baseUrl . $requestParams);
+		die();
 	}
 	
 	/**
@@ -83,5 +126,8 @@ class Controller {
 		return $this->layout;
 	}
 
+	final function getVars() {
+		return $this->vars;
+	}
 }
 ?>

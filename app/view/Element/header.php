@@ -1,12 +1,9 @@
 <?php
 ?>
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header">
-			<a class="navbar-brand">Simplex Framework Demonstration</a>
-		</div>
-		<div class="navbar-collapse collapse">
-			
-		</div>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">		
+		<a href="#" class="navbar-brand">Simplex Framework</a>
+		<button type="button" class="btn btn-default navbar-btn navbar-right" data-toggle="modal" data-target="#mdLogin">Sign in</button>		
 	</div>	
-</div>
+</nav>
+<?php $this->fetchElement('top_login'); ?>	

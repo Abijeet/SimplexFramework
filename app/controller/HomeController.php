@@ -1,6 +1,6 @@
 <?php
-class HomeController extends Controller{
+class HomeController extends AppController {	
 	public function index() {
-		$this->set('Name', 'Abijeet');
+		
 	}
 }

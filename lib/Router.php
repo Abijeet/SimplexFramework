@@ -33,7 +33,7 @@ class Router {
 		if(!empty($requestParams[1])) {
 			$this->setAction($requestParams[1]);		
 		}
-		$this->view = $this->action;
+		$this->view = array('controller' => $this->controllerName, 'action' => $this->action);
 		$this->params = array();
 				
 		// i is 2 to skip the starting controller and action.
@@ -61,15 +61,26 @@ class Router {
 		if(!$this->isRequestValid()) {
 			trigger_error($this->error, E_USER_ERROR);
 			exit;
-		}				
-		call_user_func_array(array($this->objController, $this->action), array($this));
-		$this->objView = new View($this, $this->objController);
-		$this->objView->render();
+		}
+		// Check for Authorization
+		$hasAuthorization = $this->objController->Auth->isAuthorized($this->controllerName, $this->action);
+						
+		if($hasAuthorization) {			
+			$this->objController->beforeFilter();
+			call_user_func_array(array($this->objController, $this->action), array($this));
+			$this->objView = new View($this, $this->objController);
+			$this->objView->render();			
+		} else {
+			trigger_error('No authorizations.', E_USER_ERROR);
+		}
 	}		
 	
-	public static function getURL($url = "/") {
+	public static function getURL($url = "") {
+		if(empty($url)) {
+			return "http://$_SERVER[HTTP_HOST]" . INDEX_URL;
+		}
 		return "http://$_SERVER[HTTP_HOST]" . INDEX_URL . $url . '/';		
-	}
+	}	
 	
 	/**
 	* This function determines if the controller and action exist.
@@ -100,6 +111,6 @@ class Router {
 	
 	private function setAction($action) {
 		$this->action = strtolower($action);	
-	}	
+	}
 }
 ?>

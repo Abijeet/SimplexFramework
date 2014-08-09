@@ -1,0 +1,14 @@
+{
+	"unregistered" : {
+		"allow" : {
+			"Home": ["index"],
+			"User" : ["login", "register"]
+		}
+	},
+	"normal" : {
+		"deny" : {
+			"Home" : ["index"],
+			"User" : ["login", "register"]
+		}	
+	}	
+}

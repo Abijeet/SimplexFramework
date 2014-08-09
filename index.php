@@ -6,6 +6,5 @@ define('INDEX_URL', dirname($_SERVER['SCRIPT_NAME']) . '/');
 
 require('lib/Bootstrap.php');
 
-//die(Router::getURL('res'));
 $router = new Router();
 $router->route();

@@ -7,6 +7,7 @@ class View {
 	private $layout = 'default';
 	private $objController;
 	private $view;
+	private $action;
 	private $title;
 	const VIEW_FOLDER = 'view';
 	const LAYOUT_FOLDER = 'Layout';
@@ -18,7 +19,8 @@ class View {
 		$this->title = $controller->getTitle();
 
 		$this->controller = $route->controllerName;
-		$this->view = $route->view;				
+		$this->view = $route->view;
+		$this->action = $route->action;			
 	}
 	
 	/**
@@ -55,12 +57,13 @@ class View {
 	* @return boolean false if file doesn't exist, else true
 	*/
 	private function fetchContent() {		
-		$viewPath = $this->getViewPath($this->view, $this->controller);
+		$viewPath = $this->getViewPath($this->view);
 		if(!file_exists($viewPath)) {
+			trigger_error('The view file at - ' . $viewPath . ' was not found!', E_USER_ERROR);
 			return false;
 		}
 		// Pull in the variables set by the controller.
-		$controllerVars = $this->objController->vars;
+		$controllerVars = $this->objController->getVars();
 		if(isset($controllerVars)) {
 			foreach($controllerVars as $key => $value) {
 				$$key = $value;
@@ -79,7 +82,7 @@ class View {
 	*/
 	private function getTitle() {
 		if(empty($this->title)) {
-			$action = strtolower($this->view);
+			$action = strtolower($this->action);
 			if($action === 'index') {
 				$action = '';
 				return $this->controller;
@@ -97,10 +100,14 @@ class View {
 	* @param string $controller Name of the controller	
 	* @return string Path of the view file
 	*/
-	private function getViewPath($view, $controller) {
+	private function getViewPath($view = NULL) {
+		$viewVar = $view;
+		if(empty($view)) {
+			$viewVar = $this->view;
+		}			
 		// Remove the Controller from the end of the Controller name
-		$controllerFolder = preg_replace('/Controller$/', '', $controller);
-		return APP_PATH . View::VIEW_FOLDER . DS . $controllerFolder . DS . $view . '.php';
+		$controllerFolder = preg_replace('/Controller$/', '', $viewVar['controller']);
+		return APP_PATH . View::VIEW_FOLDER . DS . $controllerFolder . DS . $viewVar['action'] . '.php';
 	}
 	
 	/**
