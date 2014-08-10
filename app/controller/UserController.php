@@ -5,6 +5,8 @@ class UserController extends AppController {
 			$response = $this->User->save($this->request->data);
 			if($response === ErrorType::NONE) {
 				
+			} else {
+				$this->setErrors($this->User->getErrors());
 			}
 		}
 	}

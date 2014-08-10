@@ -15,6 +15,8 @@ class Controller {
 	private $title;
 	private $layout;
 	private $view;
+	
+	private $modelErrors;
 		
 	function __construct($route) {
 		$this->route = $route;
@@ -128,6 +130,10 @@ class Controller {
 
 	final function getVars() {
 		return $this->vars;
+	}
+	
+	final function getErrors() {
+		return $this->{$route->controllerName}->getErrors();
 	}
 }
 ?>

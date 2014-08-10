@@ -5,7 +5,7 @@ require(__DIR__ . '/component/Validation.php');
 */
 class Model {
 	private $validation;
-	
+	private $errors;
 	function __construct() {
 		$this->validation = new Validation();
 	}
@@ -26,9 +26,13 @@ class Model {
 	
 	final public function save($data) {
 		$isValid = $this->validation->validateProps($data, get_class($this), $this->validate);
-		if(!$isValid) {
-			return ErrorType::VALIDATION_ERROR;
+		if(!$isValid) {			
+			return ErrorType::VALIDATION_ERROR;			
 		}
+	}
+	
+	final public function getErrors() {
+		$this->validation->getErrors();
 	}
 }
 ?>

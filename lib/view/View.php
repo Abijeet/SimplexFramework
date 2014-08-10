@@ -8,7 +8,9 @@ class View {
 	private $objController;
 	private $view;
 	private $action;
-	private $title;
+	private $title;	
+	private $errors;
+	
 	const VIEW_FOLDER = 'view';
 	const LAYOUT_FOLDER = 'Layout';
 	const ELEMENT_FOLDER = 'Element';
@@ -20,7 +22,8 @@ class View {
 
 		$this->controller = $route->controllerName;
 		$this->view = $route->view;
-		$this->action = $route->action;			
+		$this->action = $route->action;
+		$this->errors =  $this->objController->getErrors();
 	}
 	
 	/**
@@ -126,6 +129,10 @@ class View {
 	*/
 	private function getElementPath($element) {
 		return APP_PATH . View::VIEW_FOLDER . DS . View::ELEMENT_FOLDER . DS . $element . '.php';;
+	}
+
+	private function getErrors() {
+		return $this->errors;
 	}
 }
 ?>
