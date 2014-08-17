@@ -133,7 +133,10 @@ class Controller {
 	}
 	
 	final function getErrors() {
-		return $this->{$route->controllerName}->getErrors();
+		if(empty($this->{$this->route->controllerName})) {
+			return false;
+		}
+		return $this->{$this->route->controllerName}->getErrors();
 	}
 }
 ?>

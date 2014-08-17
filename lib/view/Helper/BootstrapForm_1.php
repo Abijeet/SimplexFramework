@@ -1,26 +1,29 @@
 <?php
-class BootstrapFormHelper {
-	//$this->Form->input('User.username', array('type' => 'text', 'id' => "txtUsername", 'label' => 'Username'));
+class BootstrapForm extends BaseHelper{	
 	private $ctrlPrefix = array('select' => 'ddl', 'text' => 'txt', 'password' => 'txt', 'checkbox' => 'chk', 'radio' => 'rdo');
 	private $errors;
 	
-	private function __construct($errors) {
+	public function __construct($errors) {
 		$this->errors = $errors;
 	}
 	
 	function input($name, $options) {
+		$inputInfo = parent::input($name, $option);
 		$type = 'text';
 		if(isset($options['type'])) {
 			$type = $options['type'];
 		}
-		$name = str_split($name);
-		$model = '';
+		$name = explode (".", $name);
+		$model = '';		
 		$ctrlName = $name[0];		
 		if(count($name) === 2) {
-			$model = $name[0] . '.';
+			$model = $name[0];
 			$ctrlName = $name[1];
 		}
-		
+		$label = ucfirst($ctrlName);
+		if(isset($options['label'])) {
+			$label = $options['label'];
+		}
 		if(isset($options['id'])) {
 			$id = $options['id'];
 		} else {
@@ -28,18 +31,12 @@ class BootstrapFormHelper {
 		}		
 		$hasError = $this->hasErrors($ctrlName);
 		$divStart = $this->getInputStart();
-		$label = $this->getLabel($id, $ctrlName);
-		$ctrlHtml = $this->getCtrlHtml();
+		$label = $this->getLabel($id, $label);
+		$ctrlHtml = $this->getCtrlHtml($type, $id, $model, $ctrlName);
 		$divEnd = $this->getInputEnd();
 		return $divStart . $label . $ctrlHtml . $divEnd;
 	}
-	/*
-	<div class="form-group has-error has-feedback">
-		<label for="txtUsername" class="control-label">Confirm Password</label> -- DONE
-		<input type="text" id="txtConfirmPassword" class="form-control">
-		<span class="glyphicon glyphicon-remove form-control-feedback"></span>
-	</div>
-	*/
+	
 	private function getLabel($id, $ctrlName) {
 		return '<label for="' . $id . '">' . ucfirst($ctrlName) . '</label>';
 	}
@@ -52,9 +49,9 @@ class BootstrapFormHelper {
 		return '<div class="' . $classes . '">';
 	}
 	
-	private function getCtrlHtml($type, $id, $value = "") {
-		if($type !== 'select') {
-			return '<input type="' . $type . '" class="form-control" id="' . $id . '" value="' . $value .'>';	
+	private function getCtrlHtml($type, $id, $model, $name, $value = "") {
+		if($type === 'text' || $type === 'password') {
+			return '<input id="' . $id . '" type="' . $type . '" name="data[' . $model . '][' . $name . ']" class="form-control" value="' . $value .'">';	
 		}		
 	}
 	

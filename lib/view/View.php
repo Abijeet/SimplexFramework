@@ -1,4 +1,6 @@
 <?php
+require('BaseHelper.php');
+require('Helper/BootstrapForm.php');
 /**
 * The base class for views.
 */
@@ -24,6 +26,7 @@ class View {
 		$this->view = $route->view;
 		$this->action = $route->action;
 		$this->errors =  $this->objController->getErrors();
+		$this->BootstrapForm = new BootstrapForm($this->errors);
 	}
 	
 	/**
