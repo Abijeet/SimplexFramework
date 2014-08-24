@@ -9,9 +9,9 @@ class Database {
         'datasource' => 'Database/Mysql',
         'persistent' => false,
         'host' => 'localhost',
-        'login' => 'snowmandev',
-        'password' => 'tFCaWA3KwutCR22Q',
-        'database' => 'Snowman_dev',
+        'login' => 'root',
+        'password' => 'XXX',
+        'database' => 'test_db',
         'encoding' => 'utf8',
     );
 }
