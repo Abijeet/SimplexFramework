@@ -29,10 +29,11 @@ class Model {
     }
 
     final public function save($data) {
-        $isValid = $this->validation->validateProps($data, get_class($this), $this->validate);
-        if (!$isValid) {
+        $hasError = $this->validation->validateProps($data, get_class($this), $this->validate);
+        if ($hasError) {
             return ErrorType::VALIDATION_ERROR;
         }
+        $table = $this->useTable;
     }
 
     final public function getErrors() {
