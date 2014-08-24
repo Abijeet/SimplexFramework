@@ -216,4 +216,3 @@ pip-log.txt
 *.clpprj
 /nbproject/private/
 /nbproject/project.xml
-/rename.sh
