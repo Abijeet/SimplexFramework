@@ -1,5 +1,5 @@
-<div class="container">
-	<div class="footer">
+<div class="container-fluid footer">
+	<div>
 		&copy; <?php echo date("Y"); ?> Abijeet
 	</div>
 </div>
