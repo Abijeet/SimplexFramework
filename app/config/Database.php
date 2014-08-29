@@ -9,8 +9,8 @@ class Database {
         'datasource' => 'Database/Mysql',
         'persistent' => false,
         'host' => 'localhost',
-        'login' => 'root',
-        'password' => 'XXX',
+        'login' => 'test',
+        'password' => 'test',
         'database' => 'test_db',
         'encoding' => 'utf8',
     );

@@ -12,7 +12,8 @@ class Validation {
         return $this->errorProps;
     }
     
-    function validateProps($data, $class, $validate) {
+    function validateProps($data, $classObj, $validate) {
+        $class = get_class($classObj);
         foreach ($validate as $prop => $rules) {
             $value = NULL;
             if (isset($data[$class][$prop])) {
@@ -49,6 +50,10 @@ class Validation {
         }
     }
 
+    private function unique($value) {
+        return true;
+    }
+    
     private function notEmpty($value) {
         if (is_bool($value)) {
             // True/False should not be considered is_bool

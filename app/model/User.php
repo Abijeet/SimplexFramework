@@ -1,7 +1,7 @@
 <?php
 
 class User extends AppModel {
-
+    public $table = 'users';
     public $validate = array(
         'username' => array(
             'notEmpty' => array(
@@ -10,6 +10,9 @@ class User extends AppModel {
             'minLength' => array(
                 'message' => 'Username should be atleast 6 characters',
                 'value' => 6
+            ),
+            'unique' => array(
+                'message' => 'This username already exists in the database'
             )
         ),
         'email' => array(
@@ -18,6 +21,9 @@ class User extends AppModel {
             ),
             'isEmail' => array(
                 'message' => 'Please enter a valid email.'
+            ),
+            'unique' => array(
+                'message' => 'This email address already exists in the database'
             )
         ),
         'password' => array(
